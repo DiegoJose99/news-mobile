@@ -1,18 +1,19 @@
 // import { View, Text, StyleSheet } from 'react-native';
-import {Text, Button, View, Image, StyleSheet, FlatList, ActivityIndicator} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { Text, Button, View, Image, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Home() {
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(true);
+  const navegacion = useNavigation();
   useEffect(() => {
     fetch(
       'https://newsapi.org/v2/everything?q=tesla&from=2023-04-27&sortBy=publishedAt&apiKey=2b756970a4c9499698c5b374cc780b25',
     )
       .then(response => response.json())
       .then(responseData => {
-        // Obtén los primeros 10 elementos
-        const limitedData = responseData.articles.slice(0, 10);
+        const limitedData = responseData.articles.slice(0, 20);
         setState(limitedData);
         setLoading(false);
       })
@@ -22,54 +23,73 @@ export default function Home() {
       });
   }, []);
 
-  const renderNewsItem = ({item}) => {
+  const handlePress = (
+    title,
+    author,
+    publishedAt,
+    description,
+    url,
+    urlToImage,
+    content,
+  ) => {
+    navegacion.navigate('Detalle', {
+      title,
+      author,
+      publishedAt,
+      description,
+      url,
+      urlToImage,
+      content,
+    });
+  };
+  const renderNewsItem = ({ item }) => {
     return (
-     <View style={{flex: 1}}>
-      
-      <View style={styles.newsItem}>
-        <View>
-          <Text style={styles.title}>{item.title}</Text>
-        </View>
-        <View style={styles.content}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={item.urlToImage ? { uri: item.urlToImage } : require('./img/no-image.png')}
-              style={styles.image}
+      <View style={{ flex: 1 }}>
+
+        <View style={styles.newsItem}>
+          <View>
+            <Text style={styles.title}>{item.title}</Text>
+          </View>
+          <View style={styles.content}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={item.urlToImage ? { uri: item.urlToImage } : require('../img/no-image.png')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              color='#60ACF8'
+              title="Ver más"
+              onPress={() =>
+                handlePress(
+                  item.title,
+                  item.author,
+                  item.publishedAt,
+                  item.description,
+                  item.url,
+                  item.urlToImage,
+                  item.content,
+                )
+              }
             />
           </View>
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{item.description}</Text>
-          </View>
+          <View style={styles.line} />
         </View>
-        <View style={styles.buttonContainer}>
-          <Button
-          color='#60ACF8'
-            title="Ver más"
-            // onPress={() =>
-            //   handlePress(
-            //     item.title,
-            //     item.author,
-            //     item.publishedAt,
-            //     item.description,
-            //     item.url,
-            //     item.urlToImage,
-            //     item.content,
-            //   )
-            // }
-          />
-        </View>
-        <View style={styles.line} />
       </View>
-    </View>
-  );
+    );
   };
 
   const newsData = state;
   return (
     <View style={styles.container}>
       <View style={styles.contenedor}>
-        <View style={{width: '15%'}} />
-        <View style={{width: '65%'}}>
+        <View style={{ width: '15%' }} />
+        <View style={{ width: '65%' }}>
           <Text allowFontScaling={false} style={styles.titleH}>
             Noticias del mundo
           </Text>
@@ -82,16 +102,16 @@ export default function Home() {
           }}
         />
       </View>
-      {loading ? ( // Si está cargando, muestra el indicador de carga
+      {loading ? (
         <ActivityIndicator style={styles.loader} size="large" color="#60ACF8" />
-      ) : newsData ? ( // Si hay datos de noticias, muestra la lista de noticias
+      ) : newsData ? (
         <FlatList
           data={newsData}
           renderItem={renderNewsItem}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.flatListContent}
         />
-      ) : ( // Si no hay datos de noticias, muestra un mensaje de carga
+      ) : (
         <Text>Cargando noticias</Text>
       )}
     </View>
@@ -100,7 +120,7 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   contenedor: {
-    // marginTop:20,
+    borderRadius: 15,
     width: '100%',
     backgroundColor: '#60ACF8',
     height: '7%',
@@ -109,7 +129,6 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     flex: 1,
-    // resizeMode: 'cover',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
@@ -137,10 +156,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     color: 'black',
-    // backgroundColor: 'pink',
     textAlign: 'justify',
     marginBottom: 10,
-    marginTop:5,
+    marginTop: 5,
   },
   content: {
     flexDirection: 'row',
@@ -158,7 +176,6 @@ const styles = StyleSheet.create({
   },
   descriptionContainer: {
     marginLeft: 5,
-    // backgroundColor: 'green',
     width: '53%',
   },
   description: {
@@ -168,26 +185,24 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
   },
   buttonContainer: {
+    borderRadius: 10,
+    overflow: 'hidden',
     marginTop: 10,
   },
   line: {
     top: 5,
     width: '100%',
-    height: 1,
+    height: 5,
     backgroundColor: '#808080',
   },
   flatListContent: {
     paddingBottom: 40,
   },
   loader: {
-    // flex: 1,
     height: '100%',
     width: '100%',
-    // backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
-    // marginTop: '80%',
-    // marginBottom: 20,
   },
   loaderTextContainer: {
     marginTop: 10,
