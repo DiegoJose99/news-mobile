@@ -1,42 +1,46 @@
 // import { View, Text, StyleSheet } from 'react-native';
 import {Text, Button, View, Image, StyleSheet, FlatList} from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 export default function App() {
-  return (
-    <View style={{flex: 1}}>
-      <View style={styles.contenedor}>
-        <View style={{width: '15%'}} />
-        <View style={{width: '65%'}}>
-          <Text allowFontScaling={false} style={styles.titleH}>
-            Noticias del mundo
-          </Text>
-        </View>
-        <View
-          style={{
-            width: '20%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}
-        />
-      </View>
+  const [state, setState] = useState({});
+  useEffect(() => {
+    fetch(
+      'https://newsapi.org/v2/everything?q=tesla&from=2023-04-27&sortBy=publishedAt&apiKey=2b756970a4c9499698c5b374cc780b25',
+    )
+      .then(response => response.json())
+      .then(responseData => {
+        // Obtén los primeros 10 elementos
+        const limitedData = responseData.articles.slice(0, 10);
+        setState(limitedData);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  const renderNewsItem = ({item}) => {
+    return (
+     <View style={{flex: 1}}>
+      
       <View style={styles.newsItem}>
         <View>
-          <Text style={styles.title}>Titulo</Text>
+          <Text style={styles.title}>{item.title}</Text>
         </View>
         <View style={styles.content}>
           <View style={styles.imageContainer}>
             <Image
-              source={require('./screens/img/car.png')}
+              source={{uri: item.urlToImage}}
               style={styles.image}
             />
           </View>
           <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>Descripcion</Text>
+            <Text style={styles.description}>{item.description}</Text>
           </View>
         </View>
         <View style={styles.buttonContainer}>
           <Button
+          color='#60ACF8'
             title="Ver más"
             // onPress={() =>
             //   handlePress(
@@ -53,6 +57,38 @@ export default function App() {
         </View>
         <View style={styles.line} />
       </View>
+    </View>
+  );
+  };
+
+  const newsData = state;
+  return (
+    <View style={styles.container}>
+      <View style={styles.contenedor}>
+        <View style={{width: '15%'}} />
+        <View style={{width: '65%'}}>
+          <Text allowFontScaling={false} style={styles.titleH}>
+            Noticias del mundo
+          </Text>
+        </View>
+        <View
+          style={{
+            width: '20%',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        />
+      </View>
+      {newsData ? (
+        <FlatList
+          data={newsData}
+          renderItem={renderNewsItem}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.flatListContent}
+        />
+      ) : (
+        <Text>Cargando noticias</Text>
+      )}
     </View>
   );
 }
@@ -89,7 +125,7 @@ const styles = StyleSheet.create({
   },
   newsItem: {
     marginVertical: 4,
-    backgroundColor: '#E5C7D1',
+    backgroundColor: '#E3D7DB',
     padding: 10,
   },
   title: {
@@ -115,9 +151,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   descriptionContainer: {
-    marginLeft: 10,
+    marginLeft: 5,
     // backgroundColor: 'green',
-    width: '56%',
+    width: '53%',
   },
   description: {
     paddingTop: '1%',
@@ -135,6 +171,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#808080',
   },
   flatListContent: {
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
 });
