@@ -1,9 +1,10 @@
 // import { View, Text, StyleSheet } from 'react-native';
-import {Text, Button, View, Image, StyleSheet, FlatList} from 'react-native';
+import {Text, Button, View, Image, StyleSheet, FlatList, ActivityIndicator} from 'react-native';
 import React, {useState, useEffect} from 'react';
 
 export default function App() {
   const [state, setState] = useState({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetch(
       'https://newsapi.org/v2/everything?q=tesla&from=2023-04-27&sortBy=publishedAt&apiKey=2b756970a4c9499698c5b374cc780b25',
@@ -13,9 +14,11 @@ export default function App() {
         // Obtén los primeros 10 elementos
         const limitedData = responseData.articles.slice(0, 10);
         setState(limitedData);
+        setLoading(false);
       })
       .catch(error => {
         console.error(error);
+        setLoading(false);
       });
   }, []);
 
@@ -79,14 +82,16 @@ export default function App() {
           }}
         />
       </View>
-      {newsData ? (
+      {loading ? ( // Si está cargando, muestra el indicador de carga
+        <ActivityIndicator style={styles.loader} size="large" color="#60ACF8" />
+      ) : newsData ? ( // Si hay datos de noticias, muestra la lista de noticias
         <FlatList
           data={newsData}
           renderItem={renderNewsItem}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={styles.flatListContent}
         />
-      ) : (
+      ) : ( // Si no hay datos de noticias, muestra un mensaje de carga
         <Text>Cargando noticias</Text>
       )}
     </View>
@@ -95,6 +100,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   contenedor: {
+    // marginTop:20,
     width: '100%',
     backgroundColor: '#60ACF8',
     height: '7%',
@@ -172,5 +178,24 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingBottom: 40,
+  },
+  loader: {
+    // flex: 1,
+    height: '100%',
+    width: '100%',
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // marginTop: '80%',
+    // marginBottom: 20,
+  },
+  loaderTextContainer: {
+    marginTop: 10,
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
