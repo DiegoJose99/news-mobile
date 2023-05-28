@@ -44,7 +44,7 @@ export default function Home() {
   };
   const renderNewsItem = ({ item }) => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.container}>
 
         <View style={styles.newsItem}>
           <View>
@@ -63,7 +63,7 @@ export default function Home() {
           </View>
           <View style={styles.buttonContainer}>
             <Button
-              color='#60ACF8'
+              color='#3f597a'
               title="Ver más"
               onPress={() =>
                 handlePress(
@@ -76,6 +76,7 @@ export default function Home() {
                   item.content,
                 )
               }
+              
             />
           </View>
           <View style={styles.line} />
@@ -86,7 +87,7 @@ export default function Home() {
 
   const newsData = state;
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.contenedor}>
         <View style={{ width: '15%' }} />
         <View style={{ width: '65%' }}>
@@ -120,12 +121,13 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   contenedor: {
-    borderRadius: 15,
     width: '100%',
-    backgroundColor: '#60ACF8',
-    height: '7%',
+    backgroundColor: '#266ab5',
+    height: '8%',
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 5,
+    paddingTop: '2%',
   },
   backgroundImage: {
     flex: 1,
@@ -135,13 +137,13 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   titleH: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
   },
   container: {
-    paddingTop: '3%',
+    paddingTop: '2%',
     paddingHorizontal: 10,
   },
   heading: {
@@ -150,8 +152,11 @@ const styles = StyleSheet.create({
   },
   newsItem: {
     marginVertical: 4,
-    backgroundColor: '#E3D7DB',
+    backgroundColor: '#eae1ef',
     padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    marginTop: 10
   },
   title: {
     fontSize: 22,
@@ -180,20 +185,22 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingTop: '1%',
+    paddingLeft: '1%',
     fontSize: 18,
     color: 'black',
     textAlign: 'justify',
   },
   buttonContainer: {
-    borderRadius: 10,
+    borderRadius: 50,
     overflow: 'hidden',
     marginTop: 10,
+    marginBottom: 5,
   },
   line: {
     top: 5,
     width: '100%',
     height: 5,
-    backgroundColor: '#808080',
+    backgroundColor: '#727476',
   },
   flatListContent: {
     paddingBottom: 40,
