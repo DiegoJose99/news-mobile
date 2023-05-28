@@ -13,7 +13,7 @@ node_modules/
 captures/
 .externalNativeBuild/
 .cxx/
-*.apk
+#*.apk
 output.json
 
 # IntelliJ
