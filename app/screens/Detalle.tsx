@@ -48,7 +48,7 @@ const Detalle = ({ route }) => {
                 </TouchableOpacity>
                 <View style={{ width: '80%' }}>
                     <Text allowFontScaling={false} style={style.titleH}>
-                        Detalle
+                        Información
                     </Text>
                 </View>
             </View>

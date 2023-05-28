@@ -9,7 +9,7 @@ export default function Home() {
   const navegacion = useNavigation();
   useEffect(() => {
     fetch(
-      'https://newsapi.org/v2/everything?q=tesla&from=2023-04-27&sortBy=publishedAt&apiKey=2b756970a4c9499698c5b374cc780b25',
+      'https://newsapi.org/v2/everything?q=tesla&from=2023-04-28&sortBy=publishedAt&apiKey=2b756970a4c9499698c5b374cc780b25',
     )
       .then(response => response.json())
       .then(responseData => {
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: 'black',
     textAlign: 'justify',
+    fontWeight:'bold',
     marginBottom: 10,
     marginTop: 5,
   },
