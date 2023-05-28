@@ -44,7 +44,7 @@ const Detalle = ({ route }) => {
             <View style={style.contenedor}>
                 <View style={{ width: '2%' }} />
                 <TouchableOpacity onPress={() => navegacion.goBack()}>
-                    <Image source={require('../img/flecha-izquierda.png')} style={{ height: 25, width: 25, tintColor: 'white' }} />
+                    <Image source={require('../img/back.png')} style={{ height: 30, width: 30 }} />
                 </TouchableOpacity>
                 <View style={{ width: '80%' }}>
                     <Text allowFontScaling={false} style={style.titleH}>
@@ -54,7 +54,7 @@ const Detalle = ({ route }) => {
             </View>
             <ScrollView>
                 <View style={style.imageContainer}>
-                    <Image source={{ uri: urlToImage }} style={style.image} />
+                    <Image source={urlToImage ? { uri: urlToImage } : require('../img/imagen-no-encontrada.jpg')} style={style.image} />
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Text

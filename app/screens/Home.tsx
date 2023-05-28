@@ -53,7 +53,7 @@ export default function Home() {
           <View style={styles.content}>
             <View style={styles.imageContainer}>
               <Image
-                source={item.urlToImage ? { uri: item.urlToImage } : require('../img/no-image.png')}
+                source={item.urlToImage ? { uri: item.urlToImage } : require('../img/imgNo.jpg')}
                 style={styles.image}
               />
             </View>
